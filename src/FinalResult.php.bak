@@ -1,0 +1,44 @@
+<?php
+
+
+class FinalResult {
+    function results($f) {
+        $d = fopen($f, "r"); // open file for reading. r is for read
+        $h = fgetcsv($d); // read header line
+        $rcs = []; // array to hold result codes
+        while(!feof($d)) { // check if the end of the file has been reached
+            $r = fgetcsv($d); // read next line
+            if(count($r) == 16) { // if line has 16 fields
+                $amt = !$r[8] || $r[8] == "0" ? 0 : (float) $r[8]; // amount 
+                $ban = !$r[6] ? "Bank account number missing" : (int) $r[6];  
+                $bac = !$r[2] ? "Bank branch code missing" : $r[2]; 
+                $e2e = !$r[10] && !$r[11] ? "End to end id missing" : $r[10] . $r[11]; // end to end id
+                $rcd = [ // array to hold result code data
+                    "amount" => 
+                    [
+                        "currency" => $h[0], 
+                        "subunits" => (int) ($amt * 100) // convert to subunits
+                    ],
+                    "bank_account_name" => str_replace(" ", "_", strtolower($r[7])), // replace spaces with underscores
+                    "bank_account_number" => $ban, 
+                    "bank_branch_code" => $bac,
+                    "bank_code" => $r[0],
+                    "end_to_end_id" => $e2e,// concatenate the two fields
+                ];
+                $rcs[] = $rcd; // add record to array
+            }
+        }
+        $rcs = array_filter($rcs);// remove empty arrays
+        return [
+            "filename" => basename($f),// get the filename from the path
+            "document" => $d,
+            "failure_code" => $h[1],
+            "failure_message" => $h[2],
+            "records" => $rcs
+        ];
+    }
+}
+
+echo records;
+
+?>

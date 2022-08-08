@@ -1,0 +1,20 @@
+1. added comments for each line to see what each one does.
+
+2. should more depedencies need to be instantited without a factory class we can use a setUp method to run before all of the tests
+normally i would remove the line from the related test function but I left it there to save you time so you can see more quickly what I did.
+
+    protected FinalResult $f;
+
+    protected function setUp() :void{
+        $this->f = new FinalResult();
+    }
+3. browser testing is unnecessary in this case. it is more consuming to begin with and can be implemented later in a seprate testing file should the need arises.
+
+4. I believe continous integration should be used especialy working with agile method. when working with clients, they want things to work firts and foremost. plus it is always good practice to 
+have one working element than a dozen buggy ones. Github Actions is a good choice for that.
+
+5. I did not modify the FinalResult.php itself beside commenting. I guess I could do so in order to check every single Array element individually in different classes. But I do not see any arm in comparing as a whole the cvs document. It even checks whether or not the field is empty and if it has reached the end.
+
+6.I also do not need to add a function checking if fields are missing since ternary operators assign a value if necessary.
+
+7. I was thinking of making a dummy but there is only one necessary function.
